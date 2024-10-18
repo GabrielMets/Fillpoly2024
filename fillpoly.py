@@ -32,11 +32,10 @@ def paleta():
             b = x * 255 // 400
             g = y * 255 // 400
             r = 255 - b - g
-            r = np.clip(r, 0, 255) #permanecer entre 0 e 255
+            r = np.clip(r, 0, 255) 
 
             paleta[y, x] = [b, g, r]
     
-    #cv2.imshow('selecione a cor do poligono:', paletaimg)
     return paleta
 
 def cor_arestas(event, x, y, flags, param):
@@ -60,7 +59,7 @@ def cor(event, x, y, flags, param):
         cv2.destroyWindow('selecione a cor do poligono:')
 
 def nova_cor(event, x, y, flags, param):
-    global b, g, r, nova_cor_selecionada
+    global b, g, r, nova_cor_selecionada, temp_list
     if event == cv2.EVENT_LBUTTONDOWN:
         nova_cor_selecionada = True
         paletaimg = param
@@ -68,22 +67,28 @@ def nova_cor(event, x, y, flags, param):
         b = int(b)
         g = int(g)
         r = int(r)
-        
+        temp_list['color'] = (b, g, r)
     
-# Função para verificar o clique
 def click_poligono_recolor(event, x, y, flags, param):
-    global vertices, encontrou
+    global vertices, encontrou, temp_list
     if event == cv2.EVENT_LBUTTONDOWN:
-        #encontrou = False
+        
 
-        for k, poligono in enumerate(poligonos):
+        
+        for k in reversed(range(len(poligonos))):
+            poligono = poligonos[k]
             dist = cv2.pointPolygonTest(np.array(poligono['points']), (x, y), False)
                 
             if dist >= 0:
-                #print(f"Ponto ({x, y}) dentro do polígono", k+1)
+                
                 encontrou = True
+                
+                temp_list = poligono
+                
                 vertices = poligono['points']
-
+                
+                poligonos.pop(k)
+               
                 cv2.imshow('selecione a nova cor do poligono:', paletaimg)
                 cv2.setMouseCallback('selecione a nova cor do poligono:', nova_cor, param=paletaimg)
                 break
@@ -94,6 +99,7 @@ def click_poligono_deletar(event, x, y, flags, param):
         for k in reversed(range(len(poligonos))):
             poligono = poligonos[k]
             dist = cv2.pointPolygonTest(np.array(poligono['points']), (x, y), False)
+            
             if dist >= 0:
                 eliminado = True
                 poligonos.pop(k)
@@ -150,8 +156,6 @@ def fill():
     for keyss, itemss in dicionario_xy.items():
         dicionario_xy[keyss] = sorted(itemss)
 
-    #print(dicionario_xy)
-
     #desenhando as linhas
     for y, x_coords in dicionario_xy.items(): #para cada Y (keys do dicionario)
         for i in range(0, len(x_coords) - 1, 2): #Para cada parzinho de X (itens do dicionario)
@@ -197,7 +201,7 @@ while True:
         if len(vertices) >= 3:
             
             poligonos.append({'points': vertices.copy(), 'color': (b, g, r), 'color_aresta': (ba, ga, ra)})
-
+    
             for i in range(len(vertices)):
                 
                 draw_line(vertices[i], vertices[(i + 1) % len(vertices)], image)
@@ -223,6 +227,7 @@ while True:
         
 
     if encontrou and nova_cor_selecionada:
+        poligonos.append(temp_list)
         fill()
         vertices = []
         encontrou = False
