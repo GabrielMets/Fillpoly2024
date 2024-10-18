@@ -1,6 +1,12 @@
 # Fillpoly2024
 Trabalho para a disciplina de Computação Gráfica - Unioeste - CascavelPR
 
+ANTES DE COMEÇAR:
+
+1. A maquina já deve possuir python3 ou superior.
+2. Devemos instalar o NumPy: “pip install numpy” e Matplotlib: “pip install matplotlib”.
+3. Devemos por fim instalar o OpenCV "pip install opencv-python".
+
 HOW TO USE:
 
 1. Execute o código com 'python3 fillpoly.py'.
