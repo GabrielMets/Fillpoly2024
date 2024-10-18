@@ -91,16 +91,13 @@ def click_poligono_recolor(event, x, y, flags, param):
 def click_poligono_deletar(event, x, y, flags, param):
     global eliminado
     if event == cv2.EVENT_LBUTTONDOWN:
-        
-
-        for k, poligono in enumerate(poligonos):
+        for k in reversed(range(len(poligonos))):
+            poligono = poligonos[k]
             dist = cv2.pointPolygonTest(np.array(poligono['points']), (x, y), False)
-                
             if dist >= 0:
                 eliminado = True
                 poligonos.pop(k)
-                break
-                            
+                break                    
 
 def fill():
 
@@ -190,9 +187,7 @@ cv2.setMouseCallback('selecione a cor do poligono:', cor, param=paletaimg)
 
 
 cv2.imshow('Como usar', HELP)
-key2 = cv2.waitKey(0) & 0xFF
-if key2 == 27:
-    cv2.destroyWindow('Como usar')
+
 
 while True:
     
@@ -202,7 +197,7 @@ while True:
         if len(vertices) >= 3:
             
             poligonos.append({'points': vertices.copy(), 'color': (b, g, r), 'color_aresta': (ba, ga, ra)})
-           
+
             for i in range(len(vertices)):
                 
                 draw_line(vertices[i], vertices[(i + 1) % len(vertices)], image)
@@ -213,12 +208,8 @@ while True:
             
         else:
             cv2.imshow('ALERT', ALERT)
-            key2 = cv2.waitKey(0) & 0xFF
-            if key2 == 27:
-                cv2.destroyWindow('ALERT')
 
     if key == ord('l'):
-        
         cv2.imshow('selecione a cor do poligono:', paletaimg)
         cv2.setMouseCallback('selecione a cor do poligono:', cor, param=paletaimg)
     
@@ -228,9 +219,6 @@ while True:
     
     if key == ord('p'):
         cv2.imshow('ALERT2', ALERT2)
-        key2 = cv2.waitKey(0) & 0xFF
-        if key2 == 27:
-            cv2.destroyWindow('ALERT2')
         cv2.setMouseCallback('Poligonos', click_poligono_recolor)
         
 
@@ -245,7 +233,8 @@ while True:
     if key == ord('d'):
         cv2.setMouseCallback('Poligonos', click_poligono_deletar)
         
-    if eliminado:
+
+    if eliminado == True:
         image = np.ones((800, 800, 3), dtype=np.uint8) * 255
         cv2.imshow('Poligonos', image)
         
@@ -263,15 +252,15 @@ while True:
                 draw_line(vertices[i], vertices[(i + 1) % len(vertices)], image)
                 
             fill()
-            eliminado = False
             vertices = []
             cv2.setMouseCallback('Poligonos', mouse_callback)
+        
+        eliminado = False
+        cv2.setMouseCallback('Poligonos', mouse_callback)
+        
             
     if key == ord('h'):
         cv2.imshow('Como usar', HELP)
-        key2 = cv2.waitKey(0) & 0xFF
-        if key2 == 27:
-            cv2.destroyWindow('Como usar')
 
 
     if key == 27:
