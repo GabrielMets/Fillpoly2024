@@ -1,4 +1,4 @@
-import cv2
+import cv2 
 import numpy as np
 from math import ceil, floor
 
@@ -12,11 +12,9 @@ eliminado = False
 
 def mouse_callback(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDOWN:
-        vertices.append((x, y)) #pega x e y
-
-        cv2.circle(image, (x, y), 3, (0, 0, 0), 10) #desenha uma bolinha no vertice
-        
-        cv2.imshow('Poligonos', image) #atualiza a imagem
+        vertices.append((x, y)) 
+        cv2.circle(image, (x, y), 3, (0, 0, 0), 10) 
+        cv2.imshow('Poligonos', image)
 
 
 
@@ -26,7 +24,6 @@ def draw_line(p1, p2, image):
 
 def paleta():
     paleta = np.ones((400, 400, 3), dtype=np.uint8) * 255
-    
     for y in range(400):
         for x in range(400):
             b = x * 255 // 400
@@ -78,17 +75,11 @@ def click_poligono_recolor(event, x, y, flags, param):
         for k in reversed(range(len(poligonos))):
             poligono = poligonos[k]
             dist = cv2.pointPolygonTest(np.array(poligono['points']), (x, y), False)
-                
             if dist >= 0:
-                
                 encontrou = True
-                
                 temp_list = poligono
-                
                 vertices = poligono['points']
-                
                 poligonos.pop(k)
-               
                 cv2.imshow('selecione a nova cor do poligono:', paletaimg)
                 cv2.setMouseCallback('selecione a nova cor do poligono:', nova_cor, param=paletaimg)
                 break
@@ -99,7 +90,6 @@ def click_poligono_deletar(event, x, y, flags, param):
         for k in reversed(range(len(poligonos))):
             poligono = poligonos[k]
             dist = cv2.pointPolygonTest(np.array(poligono['points']), (x, y), False)
-            
             if dist >= 0:
                 eliminado = True
                 poligonos.pop(k)
