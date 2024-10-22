@@ -1,11 +1,13 @@
 # Fillpoly2024
 Trabalho para a disciplina de Computação Gráfica - Unioeste - CascavelPR
 
+-O algoritimo foi testado e validado em ambiente Windows 11, utilizando a IDE Visual-Studio-Code-
+
 ANTES DE COMEÇAR:
 
 1. A maquina já deve possuir python3 ou superior.
 2. Devemos instalar o NumPy: “pip install numpy” e Matplotlib: “pip install matplotlib”.
-3. Devemos por fim instalar o OpenCV "pip install opencv-python".
+3. Devemos por fim instalar o OpenCV, vamos usar dois comandos para isso: "pip install opencv-python" e "python3 -m pip install opencv-python".
 
 HOW TO USE:
 
